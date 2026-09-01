@@ -1,0 +1,1080 @@
+/* ============================================================
+   DESIGN TOKENS
+   Palette drawn from the festival itself: sindoor red, temple
+   gold zari thread, dhakai-saree cream, terracotta idol clay,
+   and the deep maroon of dusk aarti light — now rendered as
+   frosted glass panels rather than solid fills.
+   ============================================================ */
+:root {
+  --maroon-deep: #3a0508;
+  --maroon-mid: #55090d;
+  --red-sindoor: #c1272d;
+  --red-bright: #e2452e;
+  --gold: #d4af37;
+  --gold-light: #f3d98b;
+  --cream: #fbf1e0;
+  --terracotta: #b5651d;
+  --ink: #170303;
+
+  --radius-pill: 999px;
+  --radius-card: 20px;
+
+  /* Glassmorphism tokens — warm-tinted frosted glass, not plain white */
+  --glass-bg: rgba(58, 5, 8, 0.38);
+  --glass-bg-soft: rgba(58, 5, 8, 0.22);
+  --glass-border: rgba(212, 175, 55, 0.32);
+  --glass-border-strong: rgba(243, 217, 139, 0.55);
+  --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.45);
+  --glass-blur: 18px;
+
+  /* Stacking order, low to high */
+  --z-content: 1;
+  --z-petals: 30;
+  --z-controls: 40;
+  --z-navbar: 50;
+  --z-toast: 60;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  min-height: 100%;
+  background: var(--ink);
+  color: var(--cream);
+  font-family: var(--font-display), sans-serif;
+}
+
+/* ============================================================
+   GLASS UTILITY — the shared frosted-glass treatment
+   ============================================================ */
+.glass {
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  backdrop-filter: blur(var(--glass-blur)) saturate(160%);
+  -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(160%);
+  box-shadow: var(--glass-shadow);
+}
+
+/* ============================================================
+   NAVBAR — sticky across the whole site
+   ============================================================ */
+.navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: var(--z-navbar);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 12px 24px;
+  border-radius: 0 0 var(--radius-card) var(--radius-card);
+}
+.navbar-brand {
+  display: flex;
+  color: var(--gold-light);
+}
+.navbar-brand svg {
+  width: 28px;
+  height: 28px;
+}
+.navbar-links {
+  display: flex;
+  gap: 26px;
+}
+.navbar-links a {
+  color: var(--cream);
+  text-decoration: none;
+  font-family: var(--font-label), serif;
+  font-size: 0.75rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  opacity: 0.85;
+  transition: opacity 0.15s ease, color 0.15s ease;
+}
+.navbar-links a:hover {
+  opacity: 1;
+  color: var(--gold-light);
+}
+.navbar-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.icon-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: var(--glass-bg-soft);
+  border: 1px solid var(--glass-border);
+  color: var(--gold-light);
+  cursor: pointer;
+  transition: transform 0.15s ease, background 0.15s ease;
+}
+.icon-btn svg {
+  width: 17px;
+  height: 17px;
+}
+.icon-btn:hover {
+  transform: translateY(-1px);
+  background: var(--glass-bg);
+}
+.lang-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 12px;
+  border-radius: var(--radius-pill);
+  background: var(--glass-bg-soft);
+  border: 1px solid var(--glass-border);
+  color: var(--gold-light);
+  font-family: var(--font-label), serif;
+  font-size: 0.72rem;
+  letter-spacing: 0.06em;
+  cursor: pointer;
+  transition: transform 0.15s ease, background 0.15s ease;
+}
+.lang-toggle svg {
+  width: 15px;
+  height: 15px;
+}
+.lang-toggle:hover {
+  transform: translateY(-1px);
+  background: var(--glass-bg);
+}
+@media (max-width: 720px) {
+  .navbar-links {
+    display: none;
+  }
+}
+
+/* ============================================================
+   HERO STAGE
+   ============================================================ */
+.stage {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.bg-video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: 0;
+}
+
+.bg-fallback {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background: radial-gradient(ellipse at 50% 30%, #6d1015 0%, #3a0508 55%, #1c0304 100%);
+}
+
+.vignette {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background: radial-gradient(ellipse at 50% 40%, rgba(58, 5, 8, 0.15) 0%, rgba(23, 3, 3, 0.55) 65%, rgba(23, 3, 3, 0.85) 100%),
+    linear-gradient(180deg, rgba(23, 3, 3, 0.55) 0%, rgba(23, 3, 3, 0) 22%, rgba(23, 3, 3, 0) 68%, rgba(23, 3, 3, 0.9) 100%);
+  pointer-events: none;
+}
+
+/* ============================================================
+   ALPONA CORNER MOTIFS
+   ============================================================ */
+.alpona {
+  position: absolute;
+  z-index: 2;
+  width: 150px;
+  height: 150px;
+  opacity: 0.55;
+  filter: drop-shadow(0 0 6px rgba(212, 175, 55, 0.25));
+  pointer-events: none;
+}
+.alpona.tl {
+  top: 90px;
+  left: 18px;
+}
+.alpona.tr {
+  top: 90px;
+  right: 18px;
+  transform: scaleX(-1);
+}
+.alpona.bl {
+  bottom: 18px;
+  left: 18px;
+  transform: scaleY(-1);
+}
+.alpona.br {
+  bottom: 18px;
+  right: 18px;
+  transform: scale(-1, -1);
+}
+@media (max-width: 640px) {
+  .alpona {
+    width: 88px;
+    height: 88px;
+  }
+  .alpona.tl,
+  .alpona.tr {
+    top: 70px;
+  }
+}
+
+/* ============================================================
+   HERO MARK
+   ============================================================ */
+.hero {
+  position: absolute;
+  z-index: var(--z-content);
+  top: 30%;
+  left: 50%;
+  transform: translateX(-50%);
+  text-align: center;
+  width: 100%;
+  padding: 0 20px;
+}
+.hero-bengali {
+  font-size: clamp(2.2rem, 6vw, 3.6rem);
+  font-weight: 700;
+  color: var(--gold-light);
+  text-shadow: 0 0 22px rgba(212, 175, 55, 0.45), 0 2px 6px rgba(0, 0, 0, 0.6);
+  letter-spacing: 0.5px;
+  margin: 0;
+}
+.hero-eng {
+  display: block;
+  margin-top: 10px;
+  font-family: var(--font-label), serif;
+  font-size: clamp(0.7rem, 1.6vw, 0.95rem);
+  letter-spacing: 0.5em;
+  text-transform: uppercase;
+  color: var(--cream);
+  opacity: 0.85;
+}
+.hero-tagline {
+  margin: 18px auto 0;
+  max-width: 420px;
+  font-size: 0.95rem;
+  font-weight: 300;
+  color: var(--cream);
+  opacity: 0.75;
+}
+
+.scroll-cue {
+  position: absolute;
+  z-index: var(--z-content);
+  bottom: 240px;
+  left: 50%;
+  transform: translateX(-50%);
+  color: var(--gold-light);
+  opacity: 0.75;
+  animation: bob 2.2s ease-in-out infinite;
+}
+.scroll-cue svg {
+  width: 26px;
+  height: 26px;
+}
+@keyframes bob {
+  0%,
+  100% {
+    transform: translate(-50%, 0);
+  }
+  50% {
+    transform: translate(-50%, 8px);
+  }
+}
+
+/* ============================================================
+   RITUAL BUTTONS ROW — sticky (fixed) across the whole site
+   ============================================================ */
+.ritual-buttons {
+  position: fixed;
+  z-index: var(--z-controls);
+  bottom: 150px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  justify-content: center;
+  padding: 0 16px;
+  width: 100%;
+  max-width: 640px;
+}
+.ritual-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 11px 20px;
+  border-radius: var(--radius-pill);
+  color: var(--gold-light);
+  font-family: var(--font-label), serif;
+  font-size: 0.8rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: transform 0.18s ease, box-shadow 0.18s ease, background 0.18s ease;
+}
+.ritual-btn svg {
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+}
+.ritual-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 26px rgba(212, 175, 55, 0.22), var(--glass-shadow);
+}
+.ritual-btn.active {
+  background: rgba(226, 69, 46, 0.55);
+  border-color: var(--gold-light);
+  animation: pulse-glow 1.6s ease-out infinite;
+}
+@keyframes pulse-glow {
+  0% {
+    box-shadow: 0 0 0 0 rgba(226, 69, 46, 0.55);
+  }
+  70% {
+    box-shadow: 0 0 0 14px rgba(226, 69, 46, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(226, 69, 46, 0);
+  }
+}
+
+/* ============================================================
+   MUSIC BAR — sticky (fixed) across the whole site
+   ============================================================ */
+.player-bar {
+  position: fixed;
+  z-index: var(--z-controls);
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: min(92vw, 620px);
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 14px 20px;
+  border-radius: var(--radius-card);
+}
+.player-art {
+  position: relative;
+  flex-shrink: 0;
+  width: 56px;
+  height: 56px;
+  border-radius: 12px;
+  overflow: hidden;
+  background: linear-gradient(155deg, var(--red-sindoor), var(--terracotta));
+  border: 1px solid var(--gold);
+}
+.player-art-mount,
+.player-art iframe {
+  position: absolute;
+  inset: 0;
+  width: 100% !important;
+  height: 100% !important;
+  border: none;
+  pointer-events: none; /* clicks go to our own controls, not YouTube's UI */
+}
+.player-info {
+  flex: 1;
+  min-width: 0;
+}
+.player-title {
+  margin: 0;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--cream);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.player-artist {
+  margin: 1px 0 8px;
+  font-size: 0.78rem;
+  font-weight: 300;
+  color: var(--gold-light);
+  opacity: 0.85;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.player-progress {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.68rem;
+  color: var(--cream);
+  opacity: 0.8;
+}
+.player-progress input[type='range'] {
+  flex: 1;
+  -webkit-appearance: none;
+  appearance: none;
+  height: 4px;
+  border-radius: 2px;
+  background: linear-gradient(90deg, var(--red-bright) var(--pct, 0%), rgba(251, 241, 224, 0.25) var(--pct, 0%));
+  cursor: pointer;
+}
+.player-progress input[type='range']::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--gold-light);
+  border: 2px solid var(--red-sindoor);
+  margin-top: -4px;
+}
+.player-controls {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-shrink: 0;
+}
+.player-controls button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--gold-light);
+  padding: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.player-controls svg {
+  width: 20px;
+  height: 20px;
+}
+#playBtn {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  border: 1.5px solid var(--gold-light);
+}
+
+@media (max-width: 560px) {
+  .player-bar {
+    flex-wrap: wrap;
+  }
+  .player-art {
+    width: 44px;
+    height: 44px;
+  }
+  .ritual-buttons {
+    bottom: 170px;
+  }
+}
+
+/* ============================================================
+   TOAST (Share fallback)
+   ============================================================ */
+.toast {
+  position: fixed;
+  z-index: var(--z-toast);
+  bottom: 220px;
+  left: 50%;
+  transform: translate(-50%, 10px);
+  background: var(--red-sindoor);
+  color: var(--cream);
+  padding: 9px 18px;
+  border-radius: var(--radius-pill);
+  font-size: 0.8rem;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s ease, transform 0.25s ease;
+}
+.toast.show {
+  opacity: 1;
+  transform: translate(-50%, 0);
+}
+
+/* ============================================================
+   FLOWER SHOWER PETALS — fixed full-viewport, visible on scroll too
+   ============================================================ */
+.petal-layer {
+  position: fixed;
+  inset: 0;
+  z-index: var(--z-petals);
+  pointer-events: none;
+  overflow: hidden;
+}
+.petal {
+  position: absolute;
+  top: -10%;
+  font-size: 22px;
+  will-change: transform, opacity;
+  animation: petal-fall linear forwards;
+}
+@keyframes petal-fall {
+  0% {
+    transform: translate(0, -10vh) rotate(0deg);
+    opacity: 0;
+  }
+  8% {
+    opacity: 1;
+  }
+  50% {
+    transform: translate(var(--sway), 52vh) rotate(180deg);
+  }
+  100% {
+    transform: translate(calc(var(--sway) * -1), 112vh) rotate(360deg);
+    opacity: 0.9;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .petal {
+    animation-duration: 0.01s !important;
+  }
+  .ritual-btn.active {
+    animation: none;
+  }
+  .scroll-cue {
+    animation: none;
+  }
+}
+
+/* ============================================================
+   EXPLORE SECTION — countdown + gallery grid
+   ============================================================ */
+.explore-section {
+  position: relative;
+  z-index: var(--z-content);
+  padding: 120px 24px 260px;
+  max-width: 1180px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 56px;
+}
+
+.countdown-card {
+  width: 100%;
+  max-width: 560px;
+  padding: 28px 24px;
+  border-radius: var(--radius-card);
+  text-align: center;
+}
+.countdown-title {
+  margin: 0;
+  font-family: var(--font-label), serif;
+  font-size: 1.1rem;
+  letter-spacing: 0.06em;
+  color: var(--gold-light);
+  text-transform: uppercase;
+}
+.countdown-subtitle {
+  margin: 4px 0 20px;
+  font-size: 0.85rem;
+  color: var(--cream);
+  opacity: 0.7;
+}
+.countdown-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+}
+.countdown-unit {
+  padding: 14px 6px;
+  border-radius: 14px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+.countdown-value {
+  font-size: clamp(1.5rem, 4vw, 2.2rem);
+  font-weight: 500;
+  color: var(--gold-light);
+  font-family: var(--font-label), serif;
+  font-variant-numeric: tabular-nums;
+}
+.countdown-label {
+  font-size: 0.65rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--cream);
+  opacity: 0.75;
+}
+
+.explore-heading-block {
+  text-align: center;
+}
+.explore-heading {
+  margin: 0;
+  font-family: var(--font-label), serif;
+  font-size: clamp(1.6rem, 4vw, 2.2rem);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--gold-light);
+}
+.explore-subheading {
+  margin: 10px 0 0;
+  font-size: 0.9rem;
+  color: var(--cream);
+  opacity: 0.7;
+}
+
+.explore-grid {
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+@media (max-width: 900px) {
+  .explore-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+@media (max-width: 560px) {
+  .explore-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.explore-card {
+  position: relative;
+  border-radius: var(--radius-card);
+  padding: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  text-decoration: none;
+  color: inherit;
+  cursor: pointer;
+  transition: transform 0.18s ease, box-shadow 0.18s ease;
+}
+a.explore-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 14px 32px rgba(212, 175, 55, 0.2), var(--glass-shadow);
+}
+.explore-card-cta {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--glass-bg-soft);
+  border: 1px solid var(--glass-border);
+  color: var(--gold-light);
+}
+.explore-card-cta svg {
+  width: 15px;
+  height: 15px;
+}
+.explore-card-media {
+  border-radius: 14px;
+  overflow: hidden;
+  aspect-ratio: 4 / 3;
+  background: rgba(255, 255, 255, 0.04);
+}
+.explore-card-placeholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--gold-light);
+  opacity: 0.6;
+}
+.explore-card-placeholder svg {
+  width: 46px;
+  height: 46px;
+}
+.explore-card-gallery {
+  width: 100%;
+  height: 100%;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 2px;
+}
+.explore-thumb {
+  overflow: hidden;
+}
+.explore-thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.explore-card-title {
+  margin: 0;
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: var(--cream);
+}
+.explore-card-desc {
+  margin: 0;
+  font-size: 0.85rem;
+  color: var(--cream);
+  opacity: 0.7;
+  line-height: 1.5;
+}
+
+.upload-card .upload-hint {
+  margin: -4px 0 0;
+  font-size: 0.72rem;
+  color: var(--cream);
+  opacity: 0.55;
+  line-height: 1.4;
+}
+.upload-btn {
+  align-self: flex-start;
+  padding: 9px 18px;
+  border-radius: var(--radius-pill);
+  color: var(--gold-light);
+  font-family: var(--font-label), serif;
+  font-size: 0.75rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: transform 0.15s ease;
+}
+.upload-btn:hover {
+  transform: translateY(-1px);
+}
+
+/* ============================================================
+   ABOUT SECTION
+   ============================================================ */
+.about-section {
+  position: relative;
+  z-index: var(--z-content);
+  padding: 0 24px 260px;
+  display: flex;
+  justify-content: center;
+}
+.about-card {
+  max-width: 640px;
+  padding: 32px 28px;
+  border-radius: var(--radius-card);
+  text-align: center;
+}
+.about-card h2 {
+  margin: 0 0 12px;
+  font-family: var(--font-label), serif;
+  font-size: 1.2rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--gold-light);
+}
+.about-card p {
+  margin: 0;
+  font-size: 0.92rem;
+  line-height: 1.6;
+  color: var(--cream);
+  opacity: 0.8;
+}
+
+/* ============================================================
+   EXPLORE CATEGORY DETAIL PAGE (/explore/[slug])
+   ============================================================ */
+.detail-page {
+  position: relative;
+  z-index: var(--z-content);
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 120px 24px 260px;
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+}
+.detail-header {
+  border-radius: var(--radius-card);
+  padding: 28px 24px;
+  text-align: center;
+}
+.detail-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 14px;
+  color: var(--gold-light);
+  text-decoration: none;
+  font-family: var(--font-label), serif;
+  font-size: 0.75rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  opacity: 0.85;
+  transition: opacity 0.15s ease;
+}
+.detail-back:hover {
+  opacity: 1;
+}
+.detail-back svg {
+  width: 16px;
+  height: 16px;
+}
+.detail-header h1 {
+  margin: 0 0 8px;
+  font-family: var(--font-label), serif;
+  font-size: clamp(1.4rem, 4vw, 1.9rem);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--gold-light);
+}
+.detail-header p {
+  margin: 0;
+  font-size: 0.92rem;
+  color: var(--cream);
+  opacity: 0.75;
+  max-width: 520px;
+  margin-inline: auto;
+}
+.detail-gallery {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+}
+@media (max-width: 720px) {
+  .detail-gallery {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+@media (max-width: 440px) {
+  .detail-gallery {
+    grid-template-columns: 1fr;
+  }
+}
+.detail-photo {
+  border-radius: 14px;
+  overflow: hidden;
+  aspect-ratio: 4 / 3;
+}
+.detail-photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.detail-empty {
+  border-radius: var(--radius-card);
+  padding: 60px 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  color: var(--gold-light);
+  opacity: 0.75;
+}
+.detail-empty svg {
+  width: 52px;
+  height: 52px;
+}
+.detail-empty p {
+  margin: 0;
+  font-size: 0.85rem;
+}
+
+/* ============================================================
+   PANDAL MAP (/explore/pandal-map)
+   ============================================================ */
+.map-location-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 16px;
+  padding: 10px 20px;
+  border-radius: var(--radius-pill);
+  color: var(--gold-light);
+  font-family: var(--font-label), serif;
+  font-size: 0.78rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: transform 0.15s ease;
+}
+.map-location-btn:hover {
+  transform: translateY(-1px);
+}
+.map-location-btn:disabled {
+  opacity: 0.6;
+  cursor: default;
+  transform: none;
+}
+.map-location-btn svg {
+  width: 16px;
+  height: 16px;
+}
+.map-status-error {
+  margin: 10px 0 0;
+  font-size: 0.78rem;
+  color: var(--red-bright);
+}
+
+.pandal-map-layout {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 16px;
+  align-items: start;
+}
+@media (max-width: 780px) {
+  .pandal-map-layout {
+    grid-template-columns: 1fr;
+  }
+}
+
+.pandal-map-frame {
+  height: 480px;
+  border-radius: var(--radius-card);
+  overflow: hidden;
+}
+.pandal-map-canvas {
+  width: 100%;
+  height: 100%;
+}
+.pandal-map-loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(120deg, rgba(58, 5, 8, 0.4), rgba(212, 175, 55, 0.08), rgba(58, 5, 8, 0.4));
+  background-size: 200% 100%;
+  animation: shimmer 2s ease-in-out infinite;
+}
+@keyframes shimmer {
+  0% {
+    background-position: 0% 0%;
+  }
+  100% {
+    background-position: 200% 0%;
+  }
+}
+
+.pandal-list {
+  height: 480px;
+  border-radius: var(--radius-card);
+  padding: 16px;
+  overflow-y: auto;
+}
+.pandal-list-heading {
+  margin: 0 0 10px;
+  font-family: var(--font-label), serif;
+  font-size: 0.72rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--gold-light);
+  opacity: 0.9;
+}
+.pandal-list ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.pandal-list li {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 6px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+}
+.pandal-list li:last-child {
+  border-bottom: none;
+}
+.pandal-list-item {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 6px 8px;
+  border-radius: 10px;
+  background: none;
+  border: none;
+  color: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+.pandal-list-item.active {
+  background: var(--glass-bg-soft);
+  box-shadow: inset 3px 0 0 var(--gold-light);
+}
+.pandal-list-name {
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: var(--cream);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.pandal-list-area {
+  font-size: 0.72rem;
+  color: var(--cream);
+  opacity: 0.65;
+}
+.pandal-list-distance {
+  font-size: 0.7rem;
+  color: var(--gold-light);
+  opacity: 0.9;
+}
+.pandal-list-directions {
+  flex-shrink: 0;
+  font-size: 0.68rem;
+  padding: 6px 10px;
+  border-radius: var(--radius-pill);
+  color: var(--gold-light);
+  text-decoration: none;
+  background: var(--glass-bg-soft);
+  border: 1px solid var(--glass-border);
+  white-space: nowrap;
+}
+
+.map-data-note {
+  margin: 0;
+  font-size: 0.72rem;
+  color: var(--cream);
+  opacity: 0.5;
+  line-height: 1.5;
+  text-align: center;
+}
+
+/* Leaflet marker overrides — our pins are plain inline SVG, so strip
+   Leaflet's default div-icon chrome (white box + border) */
+.leaflet-div-icon.pandal-pin,
+.leaflet-div-icon.user-pin {
+  background: transparent !important;
+  border: none !important;
+}
+.user-pin-dot {
+  display: block;
+  width: 14px;
+  height: 14px;
+  background: #4285f4;
+  border: 2px solid #fff;
+  border-radius: 50%;
+  box-shadow: 0 0 0 4px rgba(66, 133, 244, 0.35);
+  animation: user-pulse 1.8s ease-out infinite;
+}
+@keyframes user-pulse {
+  0% {
+    box-shadow: 0 0 0 4px rgba(66, 133, 244, 0.35);
+  }
+  70% {
+    box-shadow: 0 0 0 12px rgba(66, 133, 244, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 4px rgba(66, 133, 244, 0);
+  }
+}
