@@ -84,12 +84,6 @@ export default function PandalMapView({ pandals, userLocation, selectedPandal, d
             <strong>{p.name}</strong>
             <br />
             {p.area}, {p.district}
-            {p.description && (
-              <>
-                <br />
-                <small>{p.description}</small>
-              </>
-            )}
             <br />
             <a
               href={`https://www.google.com/maps/dir/?api=1&destination=${p.lat},${p.lng}`}
