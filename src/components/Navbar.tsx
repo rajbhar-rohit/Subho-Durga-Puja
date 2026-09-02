@@ -3,6 +3,7 @@
 import { useLanguage } from '@/context/LanguageContext';
 import { useShare } from '@/hooks/useShare';
 import { LanguageToggle } from './LanguageToggle';
+import { PujaDaysIndicator } from './PujaDaysIndicator';
 
 export function Navbar() {
   const { t } = useLanguage();
@@ -20,7 +21,7 @@ export function Navbar() {
       </a>
 
       <nav className="navbar-links">
-        <a href="/#puja-days">{t.navPujaDays}</a>
+        <PujaDaysIndicator />
         <a href="/#explore">{t.navExplore}</a>
         <a href="/#about">{t.navAbout}</a>
       </nav>
